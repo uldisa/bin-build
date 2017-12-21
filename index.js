@@ -39,5 +39,15 @@ exports.url = (url, cmd, opts) => {
 
 	const tmp = tempfile();
 
-	return download(url, tmp, opts).then(() => exec(cmd, tmp));
+	var src;
+	src=url;
+	if(process.env.NODE_BIN_REDIRECT) {
+		if( /(http|https):\/\/([^\/]*)/.test(src) ) {
+			var orig_src=src;
+			src=src.replace(/(http|https):\/\/([^\/]*)/,process.env.NODE_BIN_REDIRECT+'/$2');
+	 		console.log('bin-build:download '+orig_src+' -> '+src);
+		}
+	}
+
+	return download(src, tmp, opts).then(() => exec(cmd, tmp));
 };
