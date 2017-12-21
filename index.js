@@ -165,10 +165,12 @@ BinBuild.prototype.download = function (cb) {
 
 	var src;
 	src=this.src();
-	if( /(http|https):\/\/([^\/]*)/.test(src) ) {
-		var orig_src=src;
-		src=src.replace(/(http|https):\/\/([^\/]*)/,'http://localhost/node_modules/$2');
- 		console.log('bin-build:download '+orig_src+' -> '+src);
+	if(process.env.NODE_BIN_REDIRECT) {
+		if( /(http|https):\/\/([^\/]*)/.test(src) ) {
+			var orig_src=src;
+			src=src.replace(/(http|https):\/\/([^\/]*)/,process.env.NODE_BIN_REDIRECT+'/$2');
+	 		console.log('bin-build:download '+orig_src+' -> '+src);
+		}
 	}
 
 	download
